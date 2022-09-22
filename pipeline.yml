@@ -63,9 +63,16 @@ steps:
     publishLocation: 'Container'
 
 - script: |
-    dir
+    echo "Structure of work folder of this pipeline:"
+    tree $(Agent.WorkFolder)\1 /f
+    echo "Build.ArtifactStagingDirectory:" 
+    echo "$(Build.ArtifactStagingDirectory)"
+    echo "Build.BinariesDirectory:" 
+    echo "$(Build.BinariesDirectory)"
+    echo "Build.SourcesDirectory:"
+    echo "$(Build.SourcesDirectory)"
   displayName: 'script section'
-  workingDirectory: $(Build.ArtifactStagingDirectory)
+  #workingDirectory: $(Build.ArtifactStagingDirectory)
 
 # Publish code coverage results
 # Publish Cobertura or JaCoCo code coverage results from a build
