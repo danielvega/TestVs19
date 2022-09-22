@@ -59,5 +59,14 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-
+# Publish code coverage results
+# Publish Cobertura or JaCoCo code coverage results from a build
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'JaCoCo' # Available options: 'JaCoCo', 'Cobertura'
+    summaryFileLocation: '$(Build.ArtifactStagingDirectory)/TestResults/**/*.coverage'
+    #pathToSources: # Optional
+    #reportDirectory: # Optional
+    #additionalCodeCoverageFiles: # Optional
+    #failIfCoverageEmpty: false # Optional
 
