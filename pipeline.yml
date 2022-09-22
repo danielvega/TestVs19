@@ -42,7 +42,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     #msbuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
-    #msbuildArguments: '/p:OutputPath=$(build.artifactstagingdirectory)'
+    msbuildArguments: '/p:OutputPath=$(build.artifactstagingdirectory)/buildTest'
 
 - task: VSTest@2
   inputs:
@@ -58,7 +58,7 @@ steps:
 #- powershell: gci env:* | sort-object name | Format-Table -AutoSize | Out-File $env:BUILD_ARTIFACTSTAGINGDIRECTORY/environment-variables.txt
 - task: PublishBuildArtifacts@1
   inputs:
-    PathToPublish: '$(Build.ArtifactStagingDirectory)'
+    PathToPublish: '$(Build.ArtifactStagingDirectory)/buildTest'
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
