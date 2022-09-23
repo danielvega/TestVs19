@@ -54,6 +54,7 @@ steps:
     vsTestVersion: '16.0'
     codeCoverageEnabled: true
     runInParallel: true
+    testSelector: 'testAssemblies'
 
 #- task: CopyFiles@2
 #  inputs:
