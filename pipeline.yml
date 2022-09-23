@@ -71,6 +71,18 @@ steps:
     testResultsFiles: '**/*.trx'
     failTaskOnFailedTests: true
 
+# Publish code coverage results
+# Publish Cobertura or JaCoCo code coverage results from a build
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'JaCoCo' # Available options: 'JaCoCo', 'Cobertura'
+    #summaryFileLocation: '$(Build.ArtifactStagingDirectory)/TestResults/**/*.coverage'
+    summaryFileLocation: '$(Agent.WorkFolder)\1\TestResults/**/*.coverage'
+    #pathToSources: # Optional
+    #reportDirectory: # Optional
+    #additionalCodeCoverageFiles: # Optional
+    #failIfCoverageEmpty: false # Optional
+
 - script: |
     echo "Structure of work folder of this pipeline:"
     tree $(Agent.WorkFolder)\1 /f
@@ -85,16 +97,3 @@ steps:
     dir "$(Agent.WorkFolder)\1\TestResults"
   displayName: 'script section'
   #workingDirectory: $(Build.ArtifactStagingDirectory)
-
-# Publish code coverage results
-# Publish Cobertura or JaCoCo code coverage results from a build
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'JaCoCo' # Available options: 'JaCoCo', 'Cobertura'
-    #summaryFileLocation: '$(Build.ArtifactStagingDirectory)/TestResults/**/*.coverage'
-    summaryFileLocation: '$(Agent.WorkFolder)\1\TestResults/**/*.coverage'
-    #pathToSources: # Optional
-    #reportDirectory: # Optional
-    #additionalCodeCoverageFiles: # Optional
-    #failIfCoverageEmpty: false # Optional
-
