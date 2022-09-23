@@ -87,14 +87,10 @@ steps:
 - script: |
     echo "Structure of work folder of this pipeline:"
     tree $(Agent.WorkFolder)\1 /f
-    echo "Agent.WorkFolder:"
-    echo "$(Agent.WorkFolder):"
-    echo "Build.ArtifactStagingDirectory:" 
-    echo "$(Build.ArtifactStagingDirectory)"
-    echo "Build.BinariesDirectory:" 
-    echo "$(Build.BinariesDirectory)"
-    echo "Build.SourcesDirectory:"
-    echo "$(Build.SourcesDirectory)"
+    echo "Agent.WorkFolder: $(Agent.WorkFolder)"
+    echo "Build.ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)" 
+    echo "Build.BinariesDirectory: $(Build.BinariesDirectory)" 
+    echo "Build.SourcesDirectory: $(Build.SourcesDirectory)"
     dir "$(Agent.WorkFolder)\1\TestResults"
     echo "Agent.TempDirectory"
     tree $(Agent.TempDirectory) /f
