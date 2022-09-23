@@ -68,7 +68,7 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testRunner: VSTest
-    testResultsFiles: '**/*.trx'
+    testResultsFiles: '$(Agent.TempDirectory)\TestResults/**/*.trx'
     failTaskOnFailedTests: true
 
 # Publish code coverage results
@@ -77,7 +77,7 @@ steps:
   inputs:
     codeCoverageTool: 'JaCoCo' # Available options: 'JaCoCo', 'Cobertura'
     #summaryFileLocation: '$(Build.ArtifactStagingDirectory)/TestResults/**/*.coverage'
-    summaryFileLocation: '$(Agent.WorkFolder)\1\TestResults/**/*.coverage'
+    summaryFileLocation: '$(Agent.TempDirectory)\TestResults/**/*.coverage'
     #pathToSources: # Optional
     #reportDirectory: # Optional
     #additionalCodeCoverageFiles: # Optional
