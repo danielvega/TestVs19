@@ -51,7 +51,9 @@ steps:
     configuration: '$(buildConfiguration)'
     searchFolder: '$(build.artifactstagingdirectory)/buildTest'
     #searchFolder: '$(build.artifactstagingdirectory)'
+    vsTestVersion: '16.0'
     codeCoverageEnabled: true
+    runInParallel: true
 
 #- task: CopyFiles@2
 #  inputs:
