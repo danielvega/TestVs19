@@ -68,11 +68,11 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-- task: PublishTestResults@2
-  inputs:
-    testRunner: VSTest
-    testResultsFiles: '$(Agent.TempDirectory)\TestResults/**/*.trx'
-    failTaskOnFailedTests: true
+#- task: PublishTestResults@2
+#  inputs:
+#    testRunner: VSTest
+#    testResultsFiles: '$(Agent.TempDirectory)\TestResults/**/*.trx'
+#    failTaskOnFailedTests: true
 
 # Publish code coverage results
 # Publish Cobertura or JaCoCo code coverage results from a build
