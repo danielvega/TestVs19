@@ -62,6 +62,12 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
+- task: PublishTestResults@2
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: '**/*.trx'
+    failTaskOnFailedTests: true
+
 - script: |
     echo "Structure of work folder of this pipeline:"
     tree $(Agent.WorkFolder)\1 /f
