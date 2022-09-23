@@ -95,5 +95,7 @@ steps:
     echo "Build.SourcesDirectory:"
     echo "$(Build.SourcesDirectory)"
     dir "$(Agent.WorkFolder)\1\TestResults"
+    echo "Agent.TempDirectory"
+    tree $(Agent.TempDirectory) /f
   displayName: 'script section'
   #workingDirectory: $(Build.ArtifactStagingDirectory)
