@@ -65,6 +65,8 @@ steps:
 - script: |
     echo "Structure of work folder of this pipeline:"
     tree $(Agent.WorkFolder)\1 /f
+    echo "Agent.WorkFolder:"
+    echo "$(Agent.WorkFolder):"
     echo "Build.ArtifactStagingDirectory:" 
     echo "$(Build.ArtifactStagingDirectory)"
     echo "Build.BinariesDirectory:" 
@@ -80,7 +82,7 @@ steps:
   inputs:
     codeCoverageTool: 'JaCoCo' # Available options: 'JaCoCo', 'Cobertura'
     #summaryFileLocation: '$(Build.ArtifactStagingDirectory)/TestResults/**/*.coverage'
-    summaryFileLocation: '$(Build.ArtifactStagingDirectory)/TestResults/**/*.coverage'
+    summaryFileLocation: '$(Agent.WorkFolder)\1\TestResults/**/*.coverage'
     #pathToSources: # Optional
     #reportDirectory: # Optional
     #additionalCodeCoverageFiles: # Optional
