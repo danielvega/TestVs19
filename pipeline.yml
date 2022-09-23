@@ -42,15 +42,15 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     #msbuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
-    #msbuildArguments: '/p:OutputPath=$(build.artifactstagingdirectory)/buildTest'
+    msbuildArguments: '/p:OutputPath=$(build.artifactstagingdirectory)/buildTest'
     #msbuildArguments: '/p:OutputPath=$(build.artifactstagingdirectory)'
 
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    #searchFolder: '$(build.artifactstagingdirectory)/buildTest'
-    searchFolder: '$(build.artifactstagingdirectory)'
+    searchFolder: '$(build.artifactstagingdirectory)/buildTest'
+    #searchFolder: '$(build.artifactstagingdirectory)'
     codeCoverageEnabled: true
 
 #- task: CopyFiles@2
@@ -58,12 +58,12 @@ steps:
 #    targetFolder: '$(Build.ArtifactStagingDirectory)'
 
 #- powershell: gci env:* | sort-object name | Format-Table -AutoSize | Out-File $env:BUILD_ARTIFACTSTAGINGDIRECTORY/environment-variables.txt
-- task: PublishBuildArtifacts@1
-  inputs:
-    #PathToPublish: '$(Build.ArtifactStagingDirectory)/buildTest'
-    PathToPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+#- task: PublishBuildArtifacts@1
+#  inputs:
+#    #PathToPublish: '$(Build.ArtifactStagingDirectory)/buildTest'
+#    PathToPublish: '$(Build.ArtifactStagingDirectory)'
+#    ArtifactName: 'drop'
+#    publishLocation: 'Container'
 
 - task: PublishTestResults@2
   inputs:
