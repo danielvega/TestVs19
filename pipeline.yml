@@ -43,7 +43,7 @@ steps:
     configuration: '$(buildConfiguration)'
     #msbuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
     #msbuildArguments: '/p:OutputPath=$(build.artifactstagingdirectory)/buildTest'
-    msbuildArguments: '/p:OutputPath=$(build.artifactstagingdirectory)'
+    #msbuildArguments: '/p:OutputPath=$(build.artifactstagingdirectory)'
 
 - task: VSTest@2
   inputs:
