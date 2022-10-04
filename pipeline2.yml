@@ -41,40 +41,27 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArguments: '/p:TransformConfigFiles=True /p:IsTFSBuild=True /p:OutputPath=$(build.artifactstagingdirectory)/buildTest'
+    msbuildArguments: '/p:TransformConfigFiles=True /p:DebugSymbols=True /p:DebugType=portable -m /p:OutputPath=$(build.artifactstagingdirectory)/buildTest'
 
-- task: VSTest@2
+- task: NuGetCommand@2
+  displayName: 'Restore Coverlet Adapter'
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    searchFolder: '$(build.artifactstagingdirectory)/buildTest'
-    vsTestVersion: '16.0'
-    codeCoverageEnabled: true
-    testSelector: 'testAssemblies'
+    command: custom
+    restoreDirectory: .\
+    arguments: 'install coverlet.collector -Version 3.0.3 -ExcludeVersion'
 
-#- task: CopyFiles@2
-#  inputs:
-#    targetFolder: '$(Build.ArtifactStagingDirectory)'
-
-#- powershell: gci env:* | sort-object name | Format-Table -AutoSize | Out-File $env:BUILD_ARTIFACTSTAGINGDIRECTORY/environment-variables.txt
-- task: PublishBuildArtifacts@1
+- task: DotNetCoreCLI@2
   inputs:
-    #PathToPublish: '$(Build.ArtifactStagingDirectory)/buildTest'
-    PathToPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    command: test
+    arguments: $(solution) --no-build -a $(Build.SourcesDirectory)\coverlet.collector\build\netstandard1.0 --collect:"XPlat Code Coverage"
 
-#- task: PublishTestResults@2
-#  inputs:
-#    testRunner: VSTest
-#    testResultsFiles: '$(Agent.TempDirectory)\TestResults/**/*.trx'
-#    failTaskOnFailedTests: true
+
 
 # Publish code coverage results
 # Publish Cobertura or JaCoCo code coverage results from a build
 - task: PublishCodeCoverageResults@1
   inputs:
-    codeCoverageTool: 'JaCoCo' # Available options: 'JaCoCo', 'Cobertura'
+    codeCoverageTool: 'Cobertura' # Available options: 'JaCoCo', 'Cobertura'
     #summaryFileLocation: '$(Build.ArtifactStagingDirectory)/TestResults/**/*.coverage'
     summaryFileLocation: '$(Agent.TempDirectory)\coveragereport/cobertura.xml'
     #pathToSources: # Optional
