@@ -51,7 +51,7 @@ steps:
     searchFolder: '$(build.artifactstagingdirectory)/buildTest'
     vsTestVersion: '16.0'
     codeCoverageEnabled: true
-    runInParallel: true
+    #runInParallel: true
     testSelector: 'testAssemblies'
 
 #- task: CopyFiles@2
