@@ -55,12 +55,15 @@ steps:
     command: test
     arguments: $(solution) --no-build -a $(Build.SourcesDirectory)\coverlet.collector\build\netstandard1.0 --collect:"XPlat Code Coverage"
 
-- task: reportgenerator@4
+- task: reportgenerator@5
   inputs:
     reports: $(Pipeline.Workspace)\**\coverage.cobertura.xml
     targetdir: 'coveragereport'
     reporttypes: 'HtmlInline_AzurePipelines;Cobertura'
-
+#- task: reportgenerator@5
+#  inputs:
+#    reports: 'coverage.xml'
+#    targetdir: 'coveragereport'
 # Publish code coverage results
 # Publish Cobertura or JaCoCo code coverage results from a build
 - task: PublishCodeCoverageResults@1
