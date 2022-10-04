@@ -1,0 +1,111 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+#trigger:
+#- main
+
+#trigger:
+#  branches:
+#    include:
+#    - '*'
+
+trigger: none
+
+pool:
+  vmImage: 'windows-2019'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Debug'
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+  
+- task: MSBuild@1
+  name: 'Build_Test'
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    #msbuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+    msbuildArguments: '/p:TransformConfigFiles=True /p:IsTFSBuild=True /p:OutputPath=$(build.artifactstagingdirectory)/buildTest'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    searchFolder: '$(build.artifactstagingdirectory)/buildTest'
+    vsTestVersion: '16.0'
+    codeCoverageEnabled: true
+    #runInParallel: true
+    testSelector: 'testAssemblies'
+
+#- task: CopyFiles@2
+#  inputs:
+#    targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+#- powershell: gci env:* | sort-object name | Format-Table -AutoSize | Out-File $env:BUILD_ARTIFACTSTAGINGDIRECTORY/environment-variables.txt
+- task: PublishBuildArtifacts@1
+  inputs:
+    #PathToPublish: '$(Build.ArtifactStagingDirectory)/buildTest'
+    PathToPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+#- task: PublishTestResults@2
+#  inputs:
+#    testRunner: VSTest
+#    testResultsFiles: '$(Agent.TempDirectory)\TestResults/**/*.trx'
+#    failTaskOnFailedTests: true
+
+- task: PowerShell@2
+  inputs:
+    script:
+    dotnet tool install dotnet-reportgenerator --tool-path . --version 4.0.12
+    dotnet tool install coverlet.console --tool-path . --version 1.4.1
+    mkdir .\reports
+    $unitTestFile = gci -Recurse | ?{ $_.FullName -like "*bin\*test*.dll" }
+    $coverlet = "$pwd\coverlet.exe"
+    & $coverlet $unitTestFile.FullName --target "dotnet" --targetargs "vstest $($unitTestFile.FullName) --logger:trx" --format "cobertura"
+    gci -Recurse |
+    ?{ $_.Name -eq "coverage.cobertura.xml"} |
+    %{ &"$pwd\reportgenerator.exe" "-reports:$($_.FullName)" "-targetdir:reports" "-reportstypes:HTMLInline;HTMLChart" }
+
+# Publish code coverage results
+# Publish Cobertura or JaCoCo code coverage results from a build
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'JaCoCo' # Available options: 'JaCoCo', 'Cobertura'
+    #summaryFileLocation: '$(Build.ArtifactStagingDirectory)/TestResults/**/*.coverage'
+    summaryFileLocation: '$(Agent.TempDirectory)\TestResults/**/*.coverage'
+    #pathToSources: # Optional
+    #reportDirectory: # Optional
+    #additionalCodeCoverageFiles: # Optional
+    #failIfCoverageEmpty: false # Optional
+
+- script: |
+    echo "Structure of work folder of this pipeline:"
+    tree $(Agent.WorkFolder)\1 /f
+    echo "Agent.WorkFolder: $(Agent.WorkFolder)"
+    echo "Build.ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)" 
+    echo "Build.BinariesDirectory: $(Build.BinariesDirectory)" 
+    echo "Build.SourcesDirectory: $(Build.SourcesDirectory)"
+    dir "$(Agent.WorkFolder)\1\TestResults"
+    echo "Agent.TempDirectory"
+    tree $(Agent.TempDirectory) /f
+  displayName: 'script section'
+  #workingDirectory: $(Build.ArtifactStagingDirectory)
