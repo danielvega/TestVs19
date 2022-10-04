@@ -50,7 +50,7 @@ steps:
     configuration: '$(buildConfiguration)'
     searchFolder: '$(build.artifactstagingdirectory)/buildTest'
     vsTestVersion: '16.0'
-    #codeCoverageEnabled: true
+    codeCoverageEnabled: true
     #runInParallel: true
     testSelector: 'testAssemblies'
 
